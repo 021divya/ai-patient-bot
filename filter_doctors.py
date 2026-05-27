@@ -11,12 +11,12 @@ def get_doctors_for_patient(symptoms_text):
     1. Predict specialist using ML model
     2. Filter doctors by that specialist
     """
-    # 🔹 ML prediction
+    # ML prediction
     specialist = predict_specialist(symptoms_text).lower()
     print(f"🔮 Predicted Specialist: {specialist}")
 
 
-    # 🔹 Filter doctors
+    # Filter doctors
     filtered_doctors = doctor_df[
         doctor_df['speciality'] == specialist
     ]
