@@ -58,7 +58,7 @@ def handle_symptoms(user_input: str, user_id: str):
 
     text = user_input.lower().strip()
 
-    # 1️⃣ Emergency detection
+    #  Emergency detection
     for keyword in EMERGENCY_KEYWORDS:
         if keyword in text:
             return {
@@ -66,7 +66,7 @@ def handle_symptoms(user_input: str, user_id: str):
                 "message": "This may be serious. Please go to the nearest hospital immediately."
             }
 
-    # 2️⃣ Follow-up answer handling
+    #  Follow-up answer handling
     if user_id in conversation_state:
         rule = conversation_state[user_id]
         del conversation_state[user_id]
@@ -82,7 +82,7 @@ def handle_symptoms(user_input: str, user_id: str):
             "message": f"You should consult {specialist}."
         }
 
-    # 3️⃣ Check if follow-up needed
+    #  Check if follow-up needed
     for symptom, rule in FOLLOW_UP_RULES.items():
         if symptom in text:
             conversation_state[user_id] = rule
@@ -91,7 +91,7 @@ def handle_symptoms(user_input: str, user_id: str):
                 "question": rule["question"]
             }
 
-    # 4️⃣ Normal prediction
+    #  Normal prediction
     specialist = predict_specialist(text)
 
     return {
