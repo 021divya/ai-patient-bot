@@ -9,10 +9,10 @@ from transformers import (
 )
 import torch
 
-# 1️⃣ Load dataset
+#  Load dataset
 df = pd.read_csv("data/final_symptom_speciality_dataset.csv")
 
-# 2️⃣ Encode labels
+# Encode labels
 label_map = {label: idx for idx, label in enumerate(df["Speciality"].unique())}
 df["label"] = df["Speciality"].map(label_map)
 
@@ -20,7 +20,7 @@ df["label"] = df["Speciality"].map(label_map)
 with open("model/label_map.json", "w") as f:
     json.dump(label_map, f)
 
-# 3️⃣ Train-test split
+#  Train-test split
 train_texts, val_texts, train_labels, val_labels = train_test_split(
     df["text"].tolist(),
     df["label"].tolist(),
@@ -29,7 +29,7 @@ train_texts, val_texts, train_labels, val_labels = train_test_split(
     stratify=df["label"]
 )
 
-# 4️⃣ Tokenizer
+# Tokenizer
 tokenizer = DistilBertTokenizerFast.from_pretrained(
     "distilbert-base-uncased"
 )
@@ -37,7 +37,7 @@ tokenizer = DistilBertTokenizerFast.from_pretrained(
 train_enc = tokenizer(train_texts, truncation=True, padding=True)
 val_enc = tokenizer(val_texts, truncation=True, padding=True)
 
-# 5️⃣ Dataset class
+#  Dataset class
 class SymptomDataset(torch.utils.data.Dataset):
     def __init__(self, encodings, labels):
         self.encodings = encodings
@@ -54,13 +54,13 @@ class SymptomDataset(torch.utils.data.Dataset):
 train_dataset = SymptomDataset(train_enc, train_labels)
 val_dataset = SymptomDataset(val_enc, val_labels)
 
-# 6️⃣ Model
+#  Model
 model = DistilBertForSequenceClassification.from_pretrained(
     "distilbert-base-uncased",
     num_labels=len(label_map)
 )
 
-# 7️⃣ Training arguments
+#  Training arguments
 training_args = TrainingArguments(
     output_dir="model",
     eval_strategy="epoch",
@@ -72,7 +72,7 @@ training_args = TrainingArguments(
     report_to="none"
 )
 
-# 8️⃣ Trainer
+#  Trainer
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -81,10 +81,10 @@ trainer = Trainer(
     tokenizer=tokenizer
 )
 
-# 9️⃣ Train
+#  Train
 trainer.train()
 
-# 🔟 Save model
+# Save model
 model.save_pretrained("model")
 tokenizer.save_pretrained("model")
 
