@@ -42,7 +42,7 @@ df['fees'] = df['fees'].fillna(df['fees'].median())
 df['rating'] = df['rating'].fillna(df['rating'].median())
 
 # =========================
-# 6. AVAILABILITY (IMPORTANT PART 🔥)
+# 6. AVAILABILITY 
 # =========================
 # Keep original availability text for patient display
 df['availability_text'] = df['availability']
